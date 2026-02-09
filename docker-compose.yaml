@@ -49,7 +49,7 @@ services:
       - ./plugins:/opt/airflow/plugins # Necesarias
       - ./logs:/opt/airflow/logs # Necesarias
       - ./data:/opt/airflow/data  # Los datos a utlizar
-      - ./mlops_pipeline:/opt/airflow/mlops_pipeline/scr # Ruta de los scrips de cargar_datos y ft_engineering
+      - ./mlops_pipeline/scr:/opt/airflow/mlops_pipeline/scr # Ruta de los scrips de cargar_datos y ft_engineering
 
   # Esto es la parte central de nuestro contenedor de Airflow, el scheduler es el que se encarga de ejecutar los DAGs en los tiempos programados
   airflow-scheduler:

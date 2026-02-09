@@ -2,7 +2,7 @@
 
 import pandas as pd
 import numpy as np
-from mlops_pipeline.scr.cargar_datos import cargar_datos
+from cargar_datos import cargar_datos
 
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
@@ -79,6 +79,9 @@ if __name__ == "__main__":
             test_size=0.20,
             random_state=42,
             stratify=y)
+        
+        print(len(y), len(y_train), len(y_test))
+        print(len(X_transformed), len(X_train), len(X_test))
         
     except Exception as e:
         print(f'Error en Preprocesamiento: {e}')
