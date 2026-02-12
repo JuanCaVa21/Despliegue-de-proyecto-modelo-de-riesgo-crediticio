@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import optuna
 import warnings
+import pickle
 
 from cargar_datos import cargar_datos
 from ft_engineering import preprocessor_data
@@ -107,3 +108,9 @@ if __name__ == "__main__":
             ('model', model_final)
         ]
     )
+
+    model = Pipelines_model
+    model.fit(X_train, y_train)
+
+with open("model.pkl", "wb")as f:
+    pickle.dump(model, f)
