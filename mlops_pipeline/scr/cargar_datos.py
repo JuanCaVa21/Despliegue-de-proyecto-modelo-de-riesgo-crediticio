@@ -1,6 +1,7 @@
 # Carga de datos de Excel
 
 import pandas as pd
+import os
 
 def cargar_datos():
     """
@@ -10,10 +11,10 @@ def cargar_datos():
         df: Dataframe con los datos
     """
 
-    ruta_excel = '/Users/juanv/Documents/GitHub/Despliegue-de-proyecto-modelo-de-riesgo-crediticio/data/Base_de_datos.xlsx'
+    ruta_excel = '/Users/juanv/Documents/GitHub/Despliegue-de-proyecto-modelo-de-riesgo-crediticio/Base_de_datos.xlsx'
 
     # En caso de que el archivo no exista
-    if not ruta_excel:
+    if not os.path.exists(ruta_excel):
         raise FileNotFoundError(f"No se encontró el archivo en: {ruta_excel}")
 
     # Creamos nuestra variable a invocar despues
