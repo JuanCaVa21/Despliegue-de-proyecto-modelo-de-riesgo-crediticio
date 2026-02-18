@@ -49,10 +49,10 @@ def preprocessor_data():
         Pipeline: Pipeline de sklearn con todos los pasos del preprocesamiento
     """
 
-    numeric_features = ['salario_cliente', 'edad_cliente', 'plazo_meses', 'cuota_pactada', 'tipo_credito', 'deuda_total', 'ingreso_disponible', 'ratio_endeudamiento', 'saldo_total', 'cant_creditosvigentes', 'creditos_sectorFinanciero', 'creditos_sectorCooperativo', 'creditos_sectorReal']
+    numeric_features = ['salario_cliente', 'edad_cliente', 'plazo_meses', 'cuota_pactada', 'deuda_total', 'ingreso_disponible', 'ratio_endeudamiento', 'saldo_total', 'cant_creditosvigentes', 'creditos_sectorFinanciero', 'creditos_sectorCooperativo', 'creditos_sectorReal']
     categoric_features = ['tipo_laboral']
     ordinal_features = ['tendencia_ingresos']
-    drop_features = ['fecha_prestamo', 'puntaje', 'saldo_mora', 'saldo_mora_codeudor', 'huella_consulta', 'capital_prestado', 'total_otros_prestamos', 'puntaje_datacredito', 'saldo_principal', 'promedio_ingresos_datacredito']
+    drop_features = ['fecha_prestamo', 'puntaje', 'saldo_mora', 'saldo_mora_codeudor', 'huella_consulta', 'capital_prestado', 'total_otros_prestamos', 'puntaje_datacredito', 'saldo_principal', 'promedio_ingresos_datacredito', 'tipo_credito']
 
     preprocessor_sk = ColumnTransformer(
         transformers=[
@@ -135,4 +135,3 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(f'Error en Preprocesamiento: {e}')
-

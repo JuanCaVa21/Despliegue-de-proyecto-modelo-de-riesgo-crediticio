@@ -111,17 +111,17 @@ def model_evaluation_metrics(model, X_train, X_test, y_train, y_test):
         }
     }
 
-    overfitting_auc = metricas['test']['accuracy'] - metricas['test']['accuracy']
+    overfitting_auc = metricas['test']['auc_score'] - metricas['train']['auc_score']
 
     # Diagnóstico de overfitting
     if overfitting_auc > 0.10:
-        print(f"Overfitting detectado (diferencia ACC: {overfitting_auc:.4f})")
+        print(f"Overfitting detectado (diferencia AUC: {overfitting_auc:.4f})")
     elif overfitting_auc > 0.05:
-        print(f"Overfitting moderado detectado (diferencia ACC: {overfitting_auc:.4f})")
+        print(f"Overfitting moderado detectado (diferencia AUC: {overfitting_auc:.4f})")
     else:
-        print(f"Modelo bien (diferencia ACC: {overfitting_auc:.4f})")
+        print(f"Modelo bien (diferencia AUC: {overfitting_auc:.4f})")
 
-    print(metricas['test']['accuracy'])
+    print(metricas['test']['auc_score'])
     
     print(f"\nMatriz de Confusión (Test):")
     print(confusion_matrix(y_test, best_y_test_pred))
@@ -161,7 +161,7 @@ def objective_rf(trial, X_train, y_train):
         "reg_alpha": trial.suggest_float("reg_alpha", 0.0, 10.0),
         "reg_lambda": trial.suggest_float("reg_lambda", 0.0, 10.0),
         "objective": "binary:logistic",
-        "eval_metric": trial.suggest_categorical("eval_metric", ["auc", "logloss"]),
+        "eval_metric": "logloss",
         "random_state": 42
     }
 
@@ -180,7 +180,7 @@ def objective_rf(trial, X_train, y_train):
         X_train,
         y_train,
         cv=cv_evaluation,
-        scoring='accuracy'
+        scoring='roc_auc'
     )
 
     mean_cv = cv_score.mean()
@@ -212,17 +212,20 @@ def entrenar_modelo(best_params, X_train, y_train):
 
     return pipe_final
 
-def save_mode(model, filename="model.pkl"):
+def save_model(model, threshold ,filename="model.pkl"):
     """
     Guarda el modelo final en un archivo .pkl 
     
     :param model: Modelo final
     :param filename: Nombre del archivo a guardar
     """
+    bundle = {
+        "pipeline": model,
+        "threshold": threshold
+    }
 
     with open(filename, 'wb')as f:
-        pickle.dump(model, f)
-
+        pickle.dump(bundle, f)
 
 if __name__ == "__main__":
 
@@ -250,8 +253,12 @@ if __name__ == "__main__":
         # Mostramos las metricas de evaluacion
         model_evaluation_metrics(model_final, X_train, X_test, y_train, y_test)
 
-        # Guardamos el modelo .pkl
-        save_mode(model_final, "model.pkl")
+        # Obtenemos el threshold óptimo sobre train para guardarlo
+        _, best_t = best_treshold_train(model_final, X_train, y_train)
+        print(f"\nThreshold óptimo guardado: {best_t:.4f}")
+
+        # Guardamos el modelo .pkl junto con su threshold
+        save_model(model_final, best_t, "model.pkl")
         
     except Exception as e:
         print(f'Error {e}')
